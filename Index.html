@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirect with Device Name</title>
+</head>
+<body>
+  <p>Attempting to get your device name...</p>
+  <script>
+    // Function to get the device name using the Web Bluetooth API
+    async function getDeviceName() {
+      try {
+        // Request a Bluetooth device, prompting the user for permission
+        const device = await navigator.bluetooth.requestDevice({
+          acceptAllDevices: true
+        });
+        // Return the name of the Bluetooth device or a fallback
+        return device.name || "Unknown Device";
+      } catch (error) {
+        console.error("Error getting device name:", error);
+        return "Permission Denied or Unsupported Device";
+      }
+    }
+
+    // Main function to construct the URL and redirect
+    async function redirectToLinkly() {
+      // Get the device name using Bluetooth permissions
+      const deviceName = encodeURIComponent(await getDeviceName());
+      // Construct the Linkly URL with the device name parameter
+      const linklyUrl = `https://l.linklyhq.com/l/20hTa?deviceName=${deviceName}`;
+
+      // Redirect to the constructed Linkly URL
+      window.location.href = linklyUrl;
+    }
+
+    // Call the main function to execute
+    redirectToLinkly();
+  </script>
+</body>
+</html>
